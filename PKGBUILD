@@ -1,5 +1,5 @@
-# Maintainer: Milan Knížek <knizek@volny.cz>
-# Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
+# Maintainer: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
+# Contributor: Milan Knížek <knizek@volny.cz>
 
 pkgname=zfs-auto-snapshot-git
 pkgver=1.0.8.r7.g39bce83
@@ -63,7 +63,7 @@ build() {
   # src/zfs-auto-snapshot.sh
 
   ### Uncomment the following line to change the prefix to a shorter string
-  #sed -i 's@ zfs-auto-snapshot @ zfs-auto-snapshot --prefix=znap @' etc/*.cron.*
+  #sed -i 's@ zfs-auto-snapshot @ zfs-auto-snapshot --prefix=auto @' etc/*.cron.*
 }
 
 package() {
