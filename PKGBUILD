@@ -18,7 +18,7 @@ install=${pkgname}.install
 sha256sums=('SKIP')
 
 pkgver() {
-  cd ${pkgname%%-git}
+  cd "pkgname"
   if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
     echo "$(sed -e "s/^${pkgname%%-git}//" -e 's/^[-_/a-zA-Z]\+//' -e 's/[_-+]/./g' <<< ${GITTAG}).r$(git rev-list --count ${GITTAG}..).g$(git log -1 --format="%h")"
   else
