@@ -18,8 +18,12 @@ install=${pkgname}.install
 sha256sums=('SKIP')
 
 pkgver() {
-  cd "$srcdir/$pkgname"
-  git describe --long --tags | sed -r 's|([^/]*/)||;s|([^-]*-g)|r\1|;s|-|.|g'
+  cd ${pkgname%%-git}
+  if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
+    echo "$(sed -e "s/^${pkgname%%-git}//" -e 's/^[-_/a-zA-Z]\+//' -e 's/[_-+]/./g' <<< ${GITTAG}).r$(git rev-list --count ${GITTAG}..).g$(git log -1 --format="%h")"
+  else
+    echo "0.r$(git rev-list --count master).g$(git log -1 --format="%h")"
+  fi
 }
 
 build() {
