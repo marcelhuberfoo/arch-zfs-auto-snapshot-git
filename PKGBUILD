@@ -1,4 +1,5 @@
-# Contributor: Milan Knížek <knizek@volny.cz>
+# Maintainer: Milan Knížek <knizek@volny.cz>
+# Contributor: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
 
 pkgname=zfs-auto-snapshot-git
 pkgver=1.0.8.r7.g39bce83
