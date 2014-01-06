@@ -15,7 +15,7 @@ backup=('etc/cron.d/zfs-auto-snapshot'
         'etc/cron.hourly/zfs-auto-snapshot'
         'etc/cron.monthly/zfs-auto-snapshot'
         'etc/cron.weekly/zfs-auto-snapshot')
-install=${pkgname}.install
+install=$pkgname.install
 sha256sums=('SKIP')
 
 pkgver() {
@@ -57,13 +57,13 @@ build() {
   ### Uncomment the following 4 lines to change the snapshot name to
   ### @PREFIX_DATE_LABEL instead of @PREFIX-LABEL_DATE
   ### (this makes the automounted snapshots nicely sorted by time)
-  sed -i \
-   -e 's@SNAPNAME=\"\$opt_prefix\${opt_label:+\$opt_sep\$opt_label-\$DATE}\"@SNAPNAME=\"\$opt_prefix\${opt_label:+_$DATE\$opt_sep\$opt_label}"@' \
-   -e 's@SNAPGLOB=\"\$opt_prefix\${opt_label:+?\$opt_label}????????????????\"@SNAPGLOB=\"\$opt_prefix\${opt_label:+?????????????????\$opt_label}\"@' \
-   src/zfs-auto-snapshot.sh
+  #sed -i \
+  # -e 's@SNAPNAME=\"\$opt_prefix\${opt_label:+\$opt_sep\$opt_label-\$DATE}\"@SNAPNAME=\"\$opt_prefix\${opt_label:+_$DATE\$opt_sep\$opt_label}"@' \
+  # -e 's@SNAPGLOB=\"\$opt_prefix\${opt_label:+?\$opt_label}????????????????\"@SNAPGLOB=\"\$opt_prefix\${opt_label:+?????????????????\$opt_label}\"@' \
+  # src/zfs-auto-snapshot.sh
 
   ### Uncomment the following line to change the prefix to a shorter string
-  sed -i 's@ zfs-auto-snapshot @ zfs-auto-snapshot --prefix=znap @' etc/*.cron.*
+  #sed -i 's@ zfs-auto-snapshot @ zfs-auto-snapshot --prefix=znap @' etc/*.cron.*
 }
 
 package() {
