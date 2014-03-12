@@ -2,8 +2,8 @@
 # Contributor: Milan Knížek <knizek@volny.cz>
 
 pkgname=zfs-auto-snapshot-git
-pkgver=1.0.8.7.g39bce83
-pkgrel=1
+pkgver=1.0.8.r7.g39bce83
+pkgrel=2
 pkgdesc="An alternative implementation of the zfs-auto-snapshot service for Linux that is compatible with zfs-linux and zfs-fuse."
 arch=(i686 x86_64)
 makedepends=('git')
@@ -23,7 +23,7 @@ pkgver() {
   if GITTAG="$(git describe --abbrev=0 --tags 2>/dev/null)"; then
     local _revs_ahead_tag=$(git rev-list --count ${GITTAG}..)
     local _commit_id_short=$(git log -1 --format=%h)
-    echo $(sed -e s/^${pkgname%%-git}// -e 's/^[-_/a-zA-Z]\+//' -e 's/[-_+]/./g' <<< ${GITTAG}).${_revs_ahead_tag}.g${_commit_id_short}
+    echo $(sed -e s/^${pkgname%%-git}// -e 's/^[-_/a-zA-Z]\+//' -e 's/[-_+]/./g' <<< ${GITTAG}).r${_revs_ahead_tag}.g${_commit_id_short}
   else
     echo 0.$(git rev-list --count master).g$(git log -1 --format=%h)
   fi
