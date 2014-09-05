@@ -2,10 +2,11 @@
 # Contributor: Milan Knížek <knizek@volny.cz>
 
 pkgname=zfs-auto-snapshot-git
-pkgver=1.0.8.r7.g39bce83
-pkgrel=2
+pkgver=1.1.0.r2.gd625c53
+pkgrel=1
 pkgdesc="An alternative implementation of the zfs-auto-snapshot service for Linux that is compatible with zfs-linux and zfs-fuse."
 arch=(i686 x86_64)
+depends=('cronie')
 makedepends=('git')
 url="https://github.com/zfsonlinux/zfs-auto-snapshot"
 license=('GPL')
