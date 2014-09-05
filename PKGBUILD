@@ -1,4 +1,4 @@
-# Maintainer: Marcel Huber <`echo "moc tknup liamg tä oofrebuhlecram" | rev`>
+# Maintainer: Marcel Huber <`echo "moc tod liamg ta oofrebuhlecram" | rev`>
 # Contributor: Milan Knížek <knizek@volny.cz>
 
 pkgname=zfs-auto-snapshot-git
