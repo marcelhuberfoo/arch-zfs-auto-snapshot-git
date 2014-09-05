@@ -3,7 +3,7 @@
 
 pkgname=zfs-auto-snapshot-git
 pkgver=1.1.0.r2.gd625c53
-pkgrel=1
+pkgrel=2
 pkgdesc="An alternative implementation of the zfs-auto-snapshot service for Linux that is compatible with zfs-linux and zfs-fuse."
 arch=(i686 x86_64)
 depends=('cronie')
