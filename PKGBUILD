@@ -4,7 +4,7 @@
 
 pkgname=zfs-auto-snapshot-git
 pkgver=1.2.1.1.r0.g63e4438
-pkgrel=2
+pkgrel=3
 pkgdesc="An alternative implementation of the zfs-auto-snapshot service for Linux that is compatible with zfs-linux and zfs-fuse using systemd instead of cron."
 arch=(i686 x86_64)
 makedepends=('git')

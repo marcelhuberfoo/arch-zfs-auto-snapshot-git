@@ -22,3 +22,15 @@ post_install()
   info_systemd
   info_snapshot
 }
+
+post_upgrade()
+{
+  echo == Remember to reload systemd configuration
+  echo =\> \# systemctl --system daemon-reload
+}
+
+post_remove()
+{
+  echo == Remember to disable enabled timers, eg.:
+  echo =\> \# systemctl disable zfs-auto-snapshot-daily.timer
+}
