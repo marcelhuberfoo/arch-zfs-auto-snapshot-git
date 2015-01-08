@@ -1,7 +1,7 @@
 info_snapshot()
 {
-  echo == Additionally you can set the following to disable
-  echo == specific snapshots only \(if unset, then it is \"true\"\):
+  echo == You can set properties on pools/datasets to enable/disable
+  echo == specific snapshots \(if unset, then it evaluates to \"true\"\):
   echo =\> \# zfs set com.sun:auto-snapshot=true pool/dataset
   echo =\> \# zfs set com.sun:auto-snapshot:hourly=false pool/dataset
 }
@@ -11,6 +11,10 @@ info_systemd()
   echo == Enable and start snapshot timers as needed:
   echo == systemctl enable zfs-auto-snapshot-daily.timer
   echo == available intervals: frequent, hourly, daily, weekly, monthly
+  echo ==
+  echo == Recursively (-r) list available snapshots:
+  echo =\> \# zfs list -t snap -r pool/dataset
+  echo .
 }
 
 post_install()
