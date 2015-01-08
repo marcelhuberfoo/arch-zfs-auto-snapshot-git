@@ -27,6 +27,8 @@ pkgver() {
   fi
 }
 
+_PREFIX="/usr"
+
 build() {
   msg 'Starting make...'
   cd "$srcdir/$pkgname"
@@ -40,48 +42,59 @@ build() {
   ### See http://groups.google.com/group/zfs-fuse/browse_thread/thread/eab2b704d4275b8e
   #sed -i 's@SNAPPROP=.*@SNAPPROP=\"\"@' src/zfs-auto-snapshot.sh
 
-  ### Uncomment the following 4 lines to change the snapshot name to
+  ### COMMENT the following 4 lines to NOT change the snapshot name to
   ### @PREFIX_DATE_LABEL instead of @PREFIX-LABEL_DATE
-  ### (this makes the automounted snapshots nicely sorted by time)
-  #sed -i \
-  # -e 's@SNAPNAME=\"\$opt_prefix\${opt_label:+\$opt_sep\$opt_label-\$DATE}\"@SNAPNAME=\"\$opt_prefix\${opt_label:+_$DATE\$opt_sep\$opt_label}"@' \
-  # -e 's@SNAPGLOB=\"\$opt_prefix\${opt_label:+?\$opt_label}????????????????\"@SNAPGLOB=\"\$opt_prefix\${opt_label:+?????????????????\$opt_label}\"@' \
-  # src/zfs-auto-snapshot.sh
-  
+  ### (the following makes the snapshots nicely sorted by time)
+  sed -r -i \
+   -e 's@^(SNAPNAME="\$)(opt_prefix)(.*)-\$DATE@\1{\2}_$DATE\3@' \
+   -e 's@^(SNAPGLOB="\$)(opt_prefix)(.*})([?]+)@\1{\2}\4\3@' \
+   src/zfs-auto-snapshot.sh
+
   mkdir -p systemdfiles
-  declare -a arr=("daily" "frequent" "hourly" "monthly" "weekly")
+  ### "Label|NumberOfKeptSnapshots|systemd-timer-spec" of snapshots, eg. timer and service files, being created
+  ### adjust/extend if required
+  declare -a arr=(
+    "frequent|4|*:0/15"
+    "hourly|24|hourly"
+    "daily|31|daily"
+    "weekly|8|weekly"
+    "monthly|12|monthly"
+  )
   for i in "${arr[@]}"
   do
+    _label="$(echo $i | cut -d'|' -f1)"
+    _keep="$(echo $i | cut -d'|' -f2)"
+    _OnCalendarSpec="$(echo $i | cut -d'|' -f3)"
+	### REMOVE OR CHANGE --prefix to change snapshot prefix
+	_prefix="--prefix=znap"
     # write service files
-    cat > systemdfiles/zfs-auto-snapshot-"$i".service <<EOF
+    cat > systemdfiles/zfs-auto-snapshot-${_label}.service <<EOF
 [Unit]
-Description=ZFS ${i} snapshot service
+Description=ZFS $_label snapshot service
 
 [Service]
-ExecStart=$(sed -n -e 's@*/15 \* \* \* \* root @@' -e 's@exec @@' -e 's@zfs-auto-snapshot@/usr/bin/zfs-auto-snapshot@p' "$srcdir/$pkgname"/etc/zfs-auto-snapshot.cron.${i})
+ExecStart=$_PREFIX/bin/zfs-auto-snapshot $_prefix --quiet --syslog --label=$_label --keep=$_keep //
 EOF
-    
+
     # write timer files
-    cat > systemdfiles/zfs-auto-snapshot-"$i".timer <<EOF
+    cat > systemdfiles/zfs-auto-snapshot-${_label}.timer <<EOF
+# See systemd.timers and systemd.time manpages for details
 [Unit]
-Description=ZFS ${i} snapshot timer
+Description=ZFS $_label snapshot timer
 
 [Timer]
-OnCalendar=$(if [[ $i == frequent ]] ; then echo "*:0/15" ; else echo $i ; fi)
+OnCalendar=$_OnCalendarSpec
 Persistent=true
 
 [Install]
 WantedBy=timers.target
 EOF
   done
-  
-  ### Uncomment the following line to change the prefix to a shorter string
-  #sed -i 's@/zfs-auto-snapshot @/zfs-auto-snapshot --prefix=znap @' systemdfiles/*.service
 }
 
 package() {
   cd "$srcdir/$pkgname"
-  make DESTDIR="$pkgdir" PREFIX="/usr" install
+  make DESTDIR="$pkgdir" PREFIX="$_PREFIX" install
   mkdir -p $pkgdir"/usr/lib/systemd/system/"
   install -Dm644 systemdfiles/* $pkgdir"/usr/lib/systemd/system/"
 }
